@@ -30,9 +30,9 @@ CyeraHomeAssignment/
 Requirements
 ------------
 - Python 3.11 recommended.
-- Git and a terminal on Windows.
-- Install dependencies:
-  - `pip install -r requirements.txt`
+- Git and a command-line terminal.
+- Kafka server running on `localhost:9092`.
+
 
 Run tests
 -------------------
@@ -68,7 +68,3 @@ Notes about pytest configuration
 - To run a single test by node id:
   - `pytest tests\test_kafka.py::test_name`
 
-Additional notes
-----------------
-- Test logs appear in the console due to `log_cli = 1`.
-- `--last-failed` is enabled by default via `pytest.ini` options for convenience when re-running failed tests.
