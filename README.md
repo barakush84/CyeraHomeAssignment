@@ -31,8 +31,24 @@ Requirements
 ------------
 - Python 3.11 recommended.
 - Git and a command-line terminal.
+- Docker Desktop (for running the Kafka mock server).
 - Kafka server running on `localhost:9092`.
 
+
+
+Kafka Mock Server
+-------------------
+This project requires a local Kafka environment. A pre-configured mock server is provided in the `kafka_mock` directory.
+
+To start the mock server:
+1. Open a terminal.
+2. Navigate to the mock server directory and start the services:
+   ```bash
+   cd kafka_mock
+   docker-compose up -d
+   ```
+   
+For more details, see the [Kafka Mock Server README](kafka_mock/README.md).
 
 Run tests
 -------------------

@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - dspm-network
+
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    hostname: kafka
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "9093:9093"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+    networks:
+      - dspm-network
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  kafka-init:
+    image: confluentinc/cp-kafka:7.5.0
+    depends_on:
+      kafka:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      "
+      echo 'Creating Kafka topics...'
+      kafka-topics --create --if-not-exists --topic dspm.discovery.asset --bootstrap-server kafka:29092 --partitions 1 --replication-factor 1
+      kafka-topics --create --if-not-exists --topic dspm.policy.violation --bootstrap-server kafka:29092 --partitions 1 --replication-factor 1
+      kafka-topics --create --if-not-exists --topic dspm.remediation.requested --bootstrap-server kafka:29092 --partitions 1 --replication-factor 1
+      echo 'Topics created successfully!'
+      kafka-topics --list --bootstrap-server kafka:29092
+      "
+    networks:
+      - dspm-network
+
+  mock-dspm-service:
+    build: ./mock-dspm-service
+    container_name: mock-dspm-service
+    depends_on:
+      kafka:
+        condition: service_healthy
+      kafka-init:
+        condition: service_completed_successfully
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      INPUT_TOPIC: dspm.discovery.asset
+      VIOLATION_TOPIC: dspm.policy.violation
+      REMEDIATION_TOPIC: dspm.remediation.requested
+    networks:
+      - dspm-network
+    restart: unless-stopped
+
+networks:
+  dspm-network:
+    driver: bridge
