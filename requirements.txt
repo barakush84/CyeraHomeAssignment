@@ -1,0 +1,5 @@
+pytest
+kafka-python
+pydantic
+pytest-html
+pytest-rerunfailures

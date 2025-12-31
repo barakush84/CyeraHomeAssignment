@@ -1,0 +1,77 @@
+{
+  "unencrypted": {
+    "pii": {
+      "event_id": "evt_data_pii_001",
+      "asset_id": "pii",
+      "is_encrypted": false,
+      "is_public": false,
+      "classification": "PII",
+      "tags": {
+        "owner": "qa"
+      },
+	  "violation_type": "UNENCRYPTED_PII_DATA",
+	  "violation_severity": "CRITICAL",
+	  "remediation_type": "ENABLE_ENCRYPTION",
+	  "remediation_priority": "CRITICAL"
+    },
+    "pci": {
+      "event_id": "evt_data_pci_001",
+      "asset_id": "pci",
+      "is_encrypted": false,
+      "is_public": false,
+      "classification": "PCI",
+      "tags": {
+        "owner": "qa"
+      },
+	  "violation_type": "UNENCRYPTED_PCI_DATA",
+	  "violation_severity": "CRITICAL",
+	  "remediation_type": "ENABLE_ENCRYPTION",
+	  "remediation_priority": "CRITICAL"
+    }
+  },
+  "due_date": {
+	"pii": {
+      "event_id": "evt_due_date_pii_001",
+      "asset_id": "pii",
+      "is_encrypted": false,
+      "is_public": false,
+      "classification": "PII",
+      "tags": {
+        "owner": "qa"
+      },
+	  "violation_type": "UNENCRYPTED_PII_DATA",
+	  "violation_severity": "CRITICAL",
+	  "remediation_type": "ENABLE_ENCRYPTION",
+	  "remediation_priority": "CRITICAL"
+    },
+	"pci": {
+      "event_id": "evt_due_date_pci_001",
+      "asset_id": "pci",
+      "is_encrypted": false,
+      "is_public": false,
+      "classification": "PCI",
+      "tags": {
+        "owner": "qa"
+      },
+	  "violation_type": "UNENCRYPTED_PCI_DATA",
+	  "violation_severity": "CRITICAL",
+	  "remediation_type": "ENABLE_ENCRYPTION",
+	  "remediation_priority": "CRITICAL"
+    },
+	"public_access": {
+      "event_id": "evt_due_date_public_001",
+      "asset_id": "public",
+      "is_encrypted": true,
+      "is_public": true,
+      "classification": "INTERNAL",
+      "tags": {
+        "owner": "qa"
+      },
+	  "violation_type": "PUBLIC_ACCESS_ENABLED",
+	  "violation_severity": "HIGH",
+	  "remediation_type": "DISABLE_PUBLIC_ACCESS",
+	  "remediation_priority": "HIGH"
+    }
+	  
+  }
+}
