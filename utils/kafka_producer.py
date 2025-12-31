@@ -26,6 +26,9 @@ class KafkaEventProducer:
         :param topic: Specified Kafka topic
         :param event: The event data to send
         """
-        logger.debug(f"Publishing event to {topic}: {event}")
-        self.producer.send(topic, event)
-        self.producer.flush()
+        try:
+            logger.debug(f"Publishing event to {topic}: {event}")
+            self.producer.send(topic, event)
+            self.producer.flush()
+        except Exception as e:
+            logger.error(f"Failed to publish event to {topic}: {e}")

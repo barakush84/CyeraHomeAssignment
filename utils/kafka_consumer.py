@@ -1,5 +1,8 @@
 import json
+import logging
 from kafka import KafkaConsumer
+
+logger = logging.getLogger(__name__)
 
 class KafkaEventConsumer:
     """
@@ -26,4 +29,11 @@ class KafkaEventConsumer:
         Consume messages from the specified Kafka topic.
         :return: List of consumed messages
         """
-        return [msg.value for msg in self.consumer]
+        try:
+            logger.info(f"Consuming messages from topic: {self.topic}")
+            messages = [msg.value for msg in self.consumer]
+            logger.info(f"Consumed {len(messages)} messages from {self.topic}")
+            return messages
+        except Exception as e:
+            logger.error(f"Error consuming messages from {self.topic}: {e}")
+            return []

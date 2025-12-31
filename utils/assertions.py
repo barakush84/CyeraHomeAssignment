@@ -1,3 +1,7 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 def assert_violation_event(event, expected_type, expected_severity, source_event_id, asset_id=None) -> dict:
     """
     Asserts that a violation event matches the expected type and severity.
@@ -15,6 +19,7 @@ def assert_violation_event(event, expected_type, expected_severity, source_event
 
     assert event["violation_type"] == expected_type
     assert event["severity"] == expected_severity
+    logger.info(f"Violation event [{event['event_id']}] matched - violation_type: {event['violation_type']}, severity: {event['severity']}")
     return event
 
 def assert_remediation_event(event, expected_type, priority, asset_id=None, violation_id=None):
@@ -37,6 +42,7 @@ def assert_remediation_event(event, expected_type, priority, asset_id=None, viol
 
     assert event["remediation_type"] == expected_type
     assert event["priority"] == priority
+    logger.info(f"Remediation event [{event['event_id']}] matched - remediation_type: {event['remediation_type']}, priority: {event['priority']}")
 
 def assert_violation_remediation(*args, **kwargs):
     """
@@ -59,6 +65,7 @@ def assert_violation_remediation(*args, **kwargs):
         )
     else:
         assert len(event_violation) == 0  # No violation expected
+        logger.info("No violation event expected")
 
     if remediation_expected:
         assert_remediation_event(
@@ -71,6 +78,7 @@ def assert_violation_remediation(*args, **kwargs):
 
     else:
         assert len(params.get("event_remediation")) == 0  # No remediation expected
+        logger.info("No remediation event expected")
 
 def get_assertion_params(*args, **kwargs) -> dict:
     """
